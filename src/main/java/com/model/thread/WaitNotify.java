@@ -44,6 +44,7 @@ public class WaitNotify {
                 System.out.println(Thread.currentThread() + " hold lock. notify @ " +
                         new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 lock.notifyAll();
+                System.out.println(Thread.currentThread()+"我通知所有人了");
                 flag = false;
                 SleepUtils.second(5);
             }

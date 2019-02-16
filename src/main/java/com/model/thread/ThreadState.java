@@ -1,6 +1,13 @@
 package com.model.thread;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RecursiveAction;
+
 public class ThreadState {
+
+    static BlockingQueue linkedBlockingQueue = new LinkedBlockingQueue<Object>(10000);
 
     public static void main(String[] args) {
         new Thread(new TimeWaiting (), "TimeWaitingThread").start();
@@ -8,13 +15,22 @@ public class ThreadState {
         // 使用两个Blocked线程，一个获取锁成功，另一个被阻塞
         new Thread(new Blocked(), "BlockedThread-1").start();
         new Thread(new Blocked(), "BlockedThread-2").start();
+        ;
+
+        BlockingQueue arrayBlockingQueue = new ArrayBlockingQueue<String>(1000);
+        RecursiveAction recursiveAction;
+
     }
     // 该线程不断地进行睡眠
     static class TimeWaiting implements Runnable {
         @Override
         public void run() {
             while (true) {
-                SleepUtils.second(100);
+                try {
+                    Integer integer = (Integer)linkedBlockingQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
