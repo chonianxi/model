@@ -1,5 +1,8 @@
 package com.model.aviator;
 
+import com.googlecode.aviator.AviatorEvaluator;
+import com.googlecode.aviator.AviatorEvaluatorInstance;
+import com.googlecode.aviator.Options;
 import com.model.util.JsonUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -309,6 +313,69 @@ public class AviatorTest {
     }
 
     public static void main(String[] args){
+
+        System.out.println("-----begin-----"+System.currentTimeMillis());
+        AviatorEvaluator.setOption(Options.OPTIMIZE_LEVEL, AviatorEvaluator.EVAL);
+        Long result = (Long) AviatorEvaluator.execute("1+2+3");
+        AviatorEvaluatorInstance instance = AviatorEvaluator.newInstance();
+        instance.setOption(Options.OPTIMIZE_LEVEL, AviatorEvaluator.EVAL);
+
+        AviatorEvaluator.execute("print('hello world'); 1+2+3 ; 100-1");
+        //System.out.println(AviatorEvaluator.execute("print('hello world'); 1+2+3 ; 100-1"));
+
+        String yourName = "Michael";
+        Map<String, Object> env = new HashMap<String, Object>();
+        env.put("yourName", yourName);
+        String resultString = (String) AviatorEvaluator.execute(" 'hello ' + yourName ", env);
+        //System.out.println(resultString);  // hello Michael
+
+
+        //注册函数
+        AviatorEvaluator.addFunction(new AddFunction());
+        AviatorEvaluator.execute("add(1, 2)");
+        //System.out.println(AviatorEvaluator.execute("add(1, 2)"));           // 3.0
+
+        env = new HashMap<String, Object>();
+        env.put("a", 332);
+        env.put("b", 302);
+        AviatorEvaluator.execute("add(a, b)",env);
+        System.out.println(AviatorEvaluator.execute("a>b",env));
+        //System.out.println(AviatorEvaluator.execute("add(a, b)",env));           // 3.0
+        AviatorEvaluator.execute("add(add(1, 2), 100)");
+        //System.out.println(AviatorEvaluator.execute("add(add(1, 2), 100)")); // 103.0
+
+        Map<String, Object> env1 = new HashMap<String, Object>();
+        env1.put("real",true);
+        env1.put("real1",false);
+
+        env1 = new HashMap<String, Object>();
+        env1.put("real","aa");
+        env1.put("real1","aa");
+        AviatorEvaluator.execute("real == real1",env1);
+        //System.out.println(AviatorEvaluator.execute("real == real1",env1));
+        System.out.println("-----end-----"+System.currentTimeMillis());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         String json = "[{\"propertyName\":\"orgRoute\",\"frontBrackets\":\"(\",\"postBrackets\":\")\",\"conditionOperation\":\"\",\"operation\":\"equal\",\"type\":\"string\",\"values\":[{\"label\":\"客服中心\",\"value\":[\"6456\"],\"subDeptFlag\":true}]}," +
                 "{\"propertyName\":\"orgRoute\",\"frontBrackets\":\"(\",\"postBrackets\":\")\",\"conditionOperation\":\"\",\"operation\":\"equal\",\"type\":\"string\",\"values\":[{\"label\":\"客服中心\",\"value\":[\"6456\"],\"subDeptFlag\":true}]}]";
 
