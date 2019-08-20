@@ -7,10 +7,12 @@ public class ConcreteCommand  implements Command{
         this.receiver = receiver;
     }
 
+    @Override
     public void execute() {
         receiver.action();
     }
 
+    @Override
     public void unDo() {
         receiver.unAction();
     }
